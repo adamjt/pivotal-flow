@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/ClearTax/pivotal-flow.git"
   },
-  "publishConfig":{
+  "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
