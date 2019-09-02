@@ -7,12 +7,20 @@
     "pivotal-flow-start": "index.js",
     "pivotal-flow-check": "./post-checkout.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClearTax/pivotal-flow.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "pivotal"
   ],
+  "bugs": {
+    "url": "https://github.com/ClearTax/pivotal-flow/issues"
+  },
+  "homepage": "https://github.com/ClearTax/pivotal-flow#readme",
   "author": "Raj Anand",
   "license": "ISC",
   "dependencies": {
