@@ -1,8 +1,12 @@
 {
   "name": "pivotal-flow",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automate your pivotal workflow",
   "main": "index.js",
+  "bin": {
+    "pivotal-flow-start": "index.js",
+    "pivotal-flow-check": "./post-checkout.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

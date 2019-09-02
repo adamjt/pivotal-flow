@@ -1,0 +1,132 @@
+#!/usr/bin/env node
+const axios = require('axios');
+const chalk = require('chalk');
+const inquirer = require('inquirer');
+const { execSync } = require('child_process');
+const utils = require('./utils');
+
+const {
+  isSetupDone,
+  SETUP_QUESTIONS,
+  STORY_QUESTIONS,
+  CONFIRM_QUESTIONS,
+  PIVOTAL_TOKEN,
+  PIVOTAL_PROJECT_ID,
+  getBranchPrefix,
+  CHECKOUT_QUESTIONS,
+  formatLabels,
+} = utils;
+
+/**
+ * Set up the pivotal token and project id
+ */
+const setupProject = () => {
+  inquirer.prompt(SETUP_QUESTIONS).then(answers => {
+    const { pivotalToken, pivotalProjectId } = answers;
+    if (pivotalToken && pivotalProjectId) {
+      console.log(
+        chalk.yellow(`
+        To setup run the following command in your console
+
+        ${chalk.white(`export PIVOTAL_TOKEN=${pivotalToken}`)}
+        ${chalk.white(`export PIVOTAL_PROJECT_ID=${pivotalProjectId}`)}
+
+        Once you run the above two command, run the setup script again
+        ${chalk.white('node ./scripts/hooks/pivotal/pivotal.js')}
+      `)
+      );
+    } else {
+      console.log(chalk.red`Project set up failed. Please try again.`);
+    }
+  });
+};
+/**
+ * Prompt the user to setup the project
+ */
+const confirmSetup = () => {
+  inquirer.prompt(CONFIRM_QUESTIONS).then(answers => {
+    const { projectSetup } = answers;
+    if (projectSetup) {
+      setupProject();
+    } else {
+      console.log(
+        chalk.red`Not setting up the project. You would have to add pivotal story id manually to your branch`
+      );
+    }
+  });
+};
+
+// axios basic config
+const request = axios.create({
+  baseURL: `https://www.pivotaltracker.com/services/v5`,
+  timeout: 3000,
+  headers: { 'X-TrackerToken': PIVOTAL_TOKEN },
+});
+
+/**
+ * Get the details about the current user
+ */
+const getProfileDetails = async () => {
+  return await request.get('/me').then(res => res.data);
+};
+
+/**
+ * Create a story for the given project
+ * @param  {String} projectId
+ * @param  {Object} data
+ */
+const postStory = async (projectId, data) => {
+  return await request.post(`/projects/${projectId}/stories`, data).then(res => res.data);
+};
+
+/**
+ * Create pivotal story
+ */
+const createStory = async () => {
+  /* eslint-disable @typescript-eslint/camelcase */
+  try {
+    const storyAnswers = await inquirer.prompt(STORY_QUESTIONS);
+
+    // need the current user id to set the story owner
+    // otherwise the story will be unassigned
+    const user = await getProfileDetails();
+
+    const { story_type, name, estimate, labelValues } = storyAnswers;
+    const labels = formatLabels(labelValues);
+    const storyData = {
+      story_type,
+      name,
+      estimate,
+      labels,
+      owner_ids: [user.id],
+      current_state: 'planned', // assuming the story is started if you are working on it
+    };
+
+    const story = await postStory(PIVOTAL_PROJECT_ID, storyData);
+    console.log(chalk.green`Story created successfully. Visit the story ${story.url}`);
+
+    // checkout to a new branch
+    const checkoutAnswers = await inquirer.prompt(CHECKOUT_QUESTIONS);
+    const { confirmCheckout, branchName } = checkoutAnswers;
+    if (confirmCheckout && branchName) {
+      const checkoutBranchName = `${getBranchPrefix(story_type)}/${branchName}_${story.id}`;
+      execSync(`git checkout -b ${checkoutBranchName}`);
+    }
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+// initialize the project
+const init = () => {
+  // check if project set up is already done
+  if (isSetupDone) {
+    createStory();
+  } else {
+    console.log(chalk.red`PIVOTAL_TOKEN or PIVOTAL_PROJECT_ID is missing\n`);
+    confirmSetup();
+  }
+};
+
+init();
