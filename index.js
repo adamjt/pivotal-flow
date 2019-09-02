@@ -32,7 +32,7 @@ const setupProject = () => {
         ${chalk.white(`export PIVOTAL_PROJECT_ID=${pivotalProjectId}`)}
 
         Once you run the above two command, run the setup script again
-        ${chalk.white('node ./scripts/hooks/pivotal/pivotal.js')}
+        ${chalk.white('pivotal-flow-start')}
       `)
       );
     } else {
