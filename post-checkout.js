@@ -38,8 +38,8 @@ if (prevHead === currentHead && checkoutCount === '1' && !checkPivotalId(branchN
   console.log(chalk.yellow`
     [BEING NAUGHTY] Where is your pivotal story ID in your branch name?
 
-    But, if you are new to this repo: Welcome!
-    Please refer to: https://docs.internal.cleartax.co/engineering/workflow/pivotal-story-development.html#setting-up-auto-updates-on-pivotal
+    But, if you are new to this : Welcome!
+    Please refer to: https://github.com/ClearTax/pivotal-flow#references
 
     ------ ORIGINAL BRANCH MESSAGE ------
     ${branchName}
