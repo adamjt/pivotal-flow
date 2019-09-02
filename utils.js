@@ -40,8 +40,8 @@ const CHECKOUT_QUESTIONS = [
     name: 'branchName',
     message: chalk.yellow(
       `${chalk.green('{ feature | bug | chore }')} will be prefixed with the branch name.
-      \ni.e if you choose ${chalk.green('feature')} as the story type and ${chalk.green('gstr9Preview')} as
-      \nthe branch name then your final branch name would be ${chalk.green(`feature/gstr9Preview_pivotalID`)}
+      \ni.e if you choose ${chalk.green('feature')} as the story type and ${chalk.green('testBranch')} as
+      \nthe branch name then your final branch name would be ${chalk.green(`feature/testBranch_pivotalID`)}
       \nEnter the branch name:`
     ),
     validate: val => {
