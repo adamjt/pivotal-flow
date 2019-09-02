@@ -1,6 +1,6 @@
 {
   "name": "pivotal-flow",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Automate your pivotal workflow",
   "main": "index.js",
   "bin": {
