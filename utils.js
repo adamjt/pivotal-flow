@@ -6,12 +6,15 @@ const isSetupDone = !!(PIVOTAL_TOKEN && PIVOTAL_PROJECT_ID);
 /**
  * Format the labels string
  * @param {string} value
- * @example formatLabels('dx, 2.0, test') => ['dx', '2.0', 'test']
+ * @example formatLabels('dx, 2.0, test, ') => ['dx', '2.0, 'test']
  * @example formatLabels('') => []
  */
 const formatLabels = value => {
   if (!value) return [];
-  return value.split(',').map(val => val.trim());
+  return value
+    .split(',')
+    .map(val => val.trim())
+    .filter(Boolean);
 };
 
 /**
@@ -44,7 +47,7 @@ const CHECKOUT_QUESTIONS = [
     validate: val => {
       // branch name should not be too short
       if (val && val.length > 3) return true;
-      return 'Please enter a valid branch name.';
+      return 'Please enter a valid branch name (min. 4 characters)';
     },
     when: answers => {
       return answers.confirmCheckout;
@@ -69,13 +72,14 @@ const SETUP_QUESTIONS = [
       \nEnter your pivotal token: `,
     validate: val => {
       if (val && val.length === 32) return true;
-      return 'Please enter a valid pivotal token.';
+      return 'Please enter a valid 32 characters pivotal token.';
     },
   },
   {
     type: 'input',
     name: 'pivotalProjectId',
-    message: chalk.yellow`your can find the project id here https://www.pivotaltracker.com/n/projects/your-project-id
+    message: chalk.yellow`You can find the project id in the last part of your project board's URL:
+    For eg.: In https://www.pivotaltracker.com/n/projects/12341234 '12341234' is the project id.
       \nEnter the project id: `,
     validate: value => {
       if (value.match(/^[0-9]{7}/)) return true;
@@ -99,7 +103,7 @@ const STORY_QUESTIONS = [
     validate: val => {
       // story name should not be too short
       if (val && val.length > 8) return true;
-      return 'Please enter a valid story name';
+      return 'Please enter a valid story name (min. 9 characters)';
     },
   },
   {
@@ -115,7 +119,7 @@ const STORY_QUESTIONS = [
   {
     type: 'input',
     name: 'labelValues',
-    message: 'Enter the labels by comma seperated values(press enter to ignore):',
+    message: 'Enter the story labels as comma separated values (or press enter to skip):',
   },
 ];
 

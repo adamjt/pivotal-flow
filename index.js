@@ -111,6 +111,7 @@ const createStory = async () => {
     if (confirmCheckout && branchName) {
       const checkoutBranchName = `${getBranchPrefix(story_type)}/${branchName}_${story.id}`;
       execSync(`git checkout -b ${checkoutBranchName}`);
+      execSync(`git branch -u origin/${checkoutBranchName}`);
     }
   } catch (error) {
     console.error(error);
