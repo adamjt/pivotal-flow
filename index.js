@@ -13,7 +13,7 @@ const {
   PIVOTAL_TOKEN,
   PIVOTAL_PROJECT_ID,
   getBranchPrefix,
-  CHECKOUT_QUESTIONS,
+  getCheckoutQuestions,
   formatLabels,
 } = utils;
 
@@ -36,7 +36,7 @@ const setupProject = () => {
       `)
       );
     } else {
-      console.log(chalk.red`Project set up failed. Please try again.`);
+      console.log(chalk.red(`Project set up failed. Please try again.`));
     }
   });
 };
@@ -103,10 +103,10 @@ const createStory = async () => {
     };
 
     const story = await postStory(PIVOTAL_PROJECT_ID, storyData);
-    console.log(chalk.green`Story created successfully. Visit the story ${story.url}`);
+    console.log(chalk.green(`\n\n✓ Story created successfully (${chalk.underline(story.url)})\n\n`));
 
     // checkout to a new branch
-    const checkoutAnswers = await inquirer.prompt(CHECKOUT_QUESTIONS);
+    const checkoutAnswers = await inquirer.prompt(getCheckoutQuestions(story));
     const { confirmCheckout, branchName } = checkoutAnswers;
     if (confirmCheckout && branchName) {
       const checkoutBranchName = `${getBranchPrefix(story_type)}/${branchName}_${story.id}`;
@@ -124,7 +124,7 @@ const init = () => {
   if (isSetupDone) {
     createStory();
   } else {
-    console.log(chalk.red`PIVOTAL_TOKEN or PIVOTAL_PROJECT_ID is missing\n`);
+    console.log(chalk.red(`PIVOTAL_TOKEN or PIVOTAL_PROJECT_ID is missing from your environment.\n`));
     confirmSetup();
   }
 };
