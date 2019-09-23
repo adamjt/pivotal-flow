@@ -2,6 +2,8 @@ const chalk = require('chalk');
 const slugify = require('@sindresorhus/slugify');
 const fuzzy = require('fuzzy');
 
+const { truncate } = require('./utils/common');
+
 const { PIVOTAL_TOKEN, PIVOTAL_PROJECT_ID } = process.env;
 const isSetupDone = !!(PIVOTAL_TOKEN && PIVOTAL_PROJECT_ID);
 
@@ -85,17 +87,6 @@ ${chalk.bold(`${prefix}/${'allow-user-login'}_${id}`)}\n`),
 };
 
 /**
- * Truncate a given long string and add ellipsis
- * @param {string} str
- * @return {string} - Truncated string
- */
-const trunc = str => {
-  if (str.length <= 100) return str;
-  const truncated = str.substr(0, 100);
-  return `${truncated.substr(0, truncated.lastIndexOf(' '))} ...`;
-};
-
-/**
  * Format the story question
  * @param {object} stories
  * @param {string} story.story_type - feature | bug | chore
@@ -107,13 +98,13 @@ const getStoryQuestions = stories => {
     const { story_type, name, id } = story;
     switch (story_type) {
       case 'feature':
-        return chalk.green(`⭐ : [${id}] - ${trunc(name)}`);
+        return chalk.green(`⭐ : [${id}] - ${truncate(name)}`);
       case 'bug':
-        return chalk.red(`🐞 : [${id}] - ${trunc(name)}`);
+        return chalk.red(`🐞 : [${id}] - ${truncate(name)}`);
       case 'chore':
-        return chalk.blue(`⚙️  : [${id}] - ${trunc(name)}`);
+        return chalk.blue(`⚙️  : [${id}] - ${truncate(name)}`);
       default:
-        return chalk.yellow(`[${id}] - ${trunc(name)}`);
+        return chalk.yellow(`[${id}] - ${truncate(name)}`);
     }
   });
   // TODO add debounce
@@ -138,20 +129,6 @@ const getStoryQuestions = stories => {
   ];
 };
 
-/**
- * Skip the check in certain situations:-
- * - when checking out a file
- * - when checking out to a SHA
- */
-const shouldSkipBranchCheck = (
-  /* checkout out from */
-  prevHead,
-  /* checkout out to */
-  currentHead,
-  /* checkoutType is 0 when it's a file checkout */
-  checkoutType
-) => checkoutType === '0' || prevHead === currentHead;
-
 module.exports = {
   isSetupDone,
   PIVOTAL_TOKEN,
@@ -161,5 +138,4 @@ module.exports = {
   formatLabels,
   suggestBranchName,
   getStoryQuestions,
-  shouldSkipBranchCheck,
 };

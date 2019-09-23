@@ -1,0 +1,6 @@
+*.test.js
+__tests__
+__test__
+.prettierrc.js
+.eslint*
+.editorconfig

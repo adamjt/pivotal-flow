@@ -18,7 +18,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "test": "ava"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "pivotal",
@@ -39,7 +40,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "post-checkout": "./post-checkout.js -E HUSKY_GIT_PARAMS"
+      "prepare-commit-msg": "./prepare-commit-msg.js"
     }
   },
   "lint-staged": {
@@ -61,11 +62,11 @@
     "inquirer-autocomplete-prompt": "^1.0.1"
   },
   "devDependencies": {
-    "ava": "^2.3.0",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "husky": "^3.0.5",
+    "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2"
   }
