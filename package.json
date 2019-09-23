@@ -38,7 +38,8 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "post-checkout": "./post-checkout.js -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
