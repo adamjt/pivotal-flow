@@ -1,7 +1,7 @@
-module.exports = () => {
-  /* https://github.com/typicode/husky#access-git-params-and-stdin */
-  const { HUSKY_GIT_PARAMS: params = '' } = process.env;
-  const [prevHead, currentHead, checkoutType] = params.split(' ');
+#!/usr/bin/env node
 
-  require('./hook')(prevHead, currentHead, checkoutType);
-};
+/* https://github.com/typicode/husky#access-git-params-and-stdin */
+const { HUSKY_GIT_PARAMS: params = '' } = process.env;
+const [prevHead, currentHead, checkoutType] = params.split(' ');
+
+require('./hook')(prevHead, currentHead, checkoutType);

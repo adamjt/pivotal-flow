@@ -12,9 +12,9 @@
   "bin": {
     "pivotal-flow": "index.js",
     "pivotal-flow-start": "index.js",
-    "pivotal-flow-check": "./post-checkout.js",
-    "pivotal-flow-prepare-commit-msg": "./prepare-commit-msg.js",
-    "pivotal-flow-commit-msg": "./commit-msg.js",
+    "pivotal-flow-check": "./hooks/post-checkout/index.js",
+    "pivotal-flow-prepare-commit-msg": "./hooks/prepare-commit-msg/index.js",
+    "pivotal-flow-commit-msg": "./hooks/commit-msg/index.js",
     "pfs": "index.js",
     "pf": "index.js"
   },
@@ -44,8 +44,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "prepare-commit-msg": "./prepare-commit-msg.js",
-      "post-checkout": "./post-checkout.js"
+      "prepare-commit-msg": "./hooks/prepare-commit-msg/index.js",
+      "post-checkout": "./hooks/post-checkout/index.js"
     }
   },
   "lint-staged": {
