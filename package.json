@@ -3,6 +3,12 @@
   "version": "1.1.0",
   "description": "Automate your pivotal workflow",
   "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
+  },
   "bin": {
     "pivotal-flow": "index.js",
     "pivotal-flow-start": "index.js",
@@ -16,10 +22,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
-  },
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
   },
   "keywords": [
     "pivotal",

@@ -6,11 +6,11 @@ const { inspect } = require('util');
  * @param {string} str
  * @return {string} - Truncated string
  */
-const truncate = (exports.truncate = (str, upto = 100) => {
+exports.truncate = (str, upto = 100) => {
   if (str.length <= upto) return str;
   const truncated = str.substring(0, upto);
   return `${truncated.substring(0, truncated.lastIndexOf(' '))} ...`;
-});
+};
 
 /**
  * Log only if process.env.HUSKY_DEBUG === '1'
@@ -30,7 +30,7 @@ const log = (exports.log = (...args) => {
  * @param {Boolean} options.color - Show colorized output
  * @param {Number | null} options.depth - Depth of object values to recursively display - default 1
  */
-const logObject = (exports.logObject = (label, obj, options) => {
+exports.logObject = (label, obj, options) => {
   const { showHidden = true, depth = 1, color = true } = options || {};
   log(`${chalk.underline(label)}: ${inspect(obj, showHidden, depth, color)}`);
-});
+};

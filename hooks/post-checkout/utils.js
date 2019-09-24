@@ -6,7 +6,7 @@ const { logObject } = require('../../utils/common');
  * - when checking out a file
  * - when checking out to a SHA
  */
-const shouldSkipBranchCheck = (exports.shouldSkipBranchCheck = (
+exports.shouldSkipBranchCheck = (
   /* checkout out from */
   prevHead,
   /* checkout out to */
@@ -16,7 +16,7 @@ const shouldSkipBranchCheck = (exports.shouldSkipBranchCheck = (
 ) => {
   // if it's not a branch checkout
   if (checkoutType !== '1') {
-    lologObjectg('skipped due to checkoutType', { checkoutType });
+    logObject('skipped due to checkoutType', { checkoutType });
     return true;
   }
 
@@ -25,4 +25,4 @@ const shouldSkipBranchCheck = (exports.shouldSkipBranchCheck = (
 
   logObject('inDetachedHeadState?', { detached });
   return detached;
-});
+};

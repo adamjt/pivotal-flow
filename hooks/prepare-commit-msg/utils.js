@@ -1,9 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs');
-const { execSync } = require('child_process');
-const { inspect } = require('util');
 const { resolve } = require('path');
 
-const { getCurrentBranch, getRootDirectory } = require('../../utils/git');
+const { getRootDirectory } = require('../../utils/git');
 const { getStoryId } = require('../../utils/pivotal');
 const { logObject } = require('../../utils/common');
 
@@ -17,7 +15,7 @@ const { logObject } = require('../../utils/common');
  * @example shouldSkipHook(.git/COMMIT_EDITMSG', 'message') => false
  * @example shouldSkipHook(.git/COMMIT_EDITMSG', 'commit', 'HEAD') => false // git amend
  */
-exports.shouldSkipHook = (_filename, source, sha) => source === 'commit';
+exports.shouldSkipHook = (_filename, source) => source === 'commit';
 
 /**
  * Get contents of commit message file
@@ -42,10 +40,10 @@ exports.getCommitMessage = filename => {
  * @param {String} storyId - Story id extracted from the branch.
  */
 exports.appendIdToMessage = (message, storyId) => {
-  const { found, formatted } = getStoryId(message);
+  const { found, formatted: existingStoryId } = getStoryId(message);
 
   if (found) {
-    logObject('skipping - story id already present', { message });
+    logObject('skipping - story id already present', { found, message, storyId, existingStoryId });
     return message;
   }
 

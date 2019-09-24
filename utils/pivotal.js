@@ -22,10 +22,10 @@ const getStoryId = (exports.getStoryId = (input = '') => {
  * Get the Pivotal story id details from the branch name (if it exists).
  * @returns {BranchStoryId} Story id details from the branch.
  */
-const getStoryIdFromCurrentBranch = (exports.getStoryIdFromCurrentBranch = () => {
+exports.getStoryIdFromCurrentBranch = () => {
   if (inDetachedHeadState()) return { found: false };
 
   const branchName = getCurrentBranch() || '';
 
   return getStoryId(branchName);
-});
+};

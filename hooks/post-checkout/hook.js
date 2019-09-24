@@ -1,6 +1,4 @@
-const { execSync } = require('child_process');
 const chalk = require('chalk');
-const { inspect } = require('util');
 
 const { shouldSkipBranchCheck } = require('./utils');
 const { getCurrentBranch, isNewBranch } = require('../../utils/git');
