@@ -44,8 +44,9 @@ Just add it to your `package.json` file, for example:
    },
    "husky": {
      "hooks": {
-+      "post-checkout": "pivotal-flow:check-branch,
-+      "prepare-commit-msg": "pivotal-flow:commit-message"
++      "post-checkout": "pivotal-flow-check",
++      "prepare-commit-msg": "pivotal-flow-prepare-commit-msg",
++      "commit-msg": "pivotal-flow-commit-msg"
      }
    }
  }
