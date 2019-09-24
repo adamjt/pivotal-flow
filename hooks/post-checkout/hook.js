@@ -27,7 +27,7 @@ ${chalk.inverse('[WARNING]')} A Pivotal Story ID is missing from your branch nam
 Your branch: ${chalk.white.bold(branchName)}
 
 If this is your first time contributing to this repository - welcome!
-Please refer to: ${chalk.underline('https://github.com/ClearTax/pivotal-flow#references')} to get started.
+Please refer to: ${chalk.underline('https://github.com/ClearTax/pivotal-flow#usage')} to get started.
 
 ---
 ${chalk.dim(`
