@@ -16,7 +16,7 @@ npm install -D pivotal-flow
 npm install -g pivotal-flow
 ```
 
-`pivotal-flow` works best with [`husky` 🐶][husky].
+`pivotal-flow` works best with [`husky` 🐶][husky] & the [Pivotal GitHub integration][pivotal-github].
 
 ## Usage
 
@@ -29,16 +29,29 @@ Create a new story or work on an existing story via the command line.
 
 ### `pivotal-flow-check`
 
-Check all newly created branches have the pivotal story ID in the branch name.
+Check that all _newly created branches_ have the [Pivotal][pivotal] story ID in the branch name.
 
-### `pivotal-flow:prepare-commit-msg`
+**Why do we need the ID in the branch?**
+This allows the GitHub integration to send updates to pivotal to [show branch information in a story](https://www.pivotaltracker.com/help/articles/github_integration/#using-the-github-integration-branches).
 
-Pick up story ID from a branch name & append it to each commit message.
+![github-pivotal-branches](https://www.pivotaltracker.com/help/kb_assets/github_integration_4@2x.png)
+
+![github-pivotal-pr](https://www.pivotaltracker.com/help/kb_assets/github_integration_8@2x.png)
+
+### `pivotal-flow-prepare-commit-msg`
+
+Pick up story ID from a branch name & append it to each commit message. Again, this allows the GitHub integration to send updates to pivotal to [commit information in a story](https://www.pivotaltracker.com/help/articles/github_integration/#using-the-github-integration-commits).
+
+![github-pivotal-pr](https://www.pivotaltracker.com/help/kb_assets/github_integration_11@2x.png)
+
+### `pivotal-flow-commit-msg`
+
+Check if each commit message contains the Story ID as well.
+In case you're not using the automatic addition hook (`pivotal-flow-prepare-commit-msg`) or don't want to enforce story id being present in branch name, ensure that you use `
 
 ## Set up
 
-Add the hooks from pivotal-flow to your repo via [`husky` 🐶][husky].
-Just add it to your `package.json` file, for example:
+Add the hooks from pivotal-flow to your repo to your [`husky` 🐶][husky] config in your `package.json` file, for example:
 
 ```diff
    },
