@@ -9,7 +9,7 @@ const { getStoryIdFromCurrentBranch } = require('../../utils/pivotal');
  * @param {String} source - 'commit' | 'message'
  * @param {String} sha - the commit SHA
  */
-const prepareCommitMessage = async (filename, source, sha) => {
+const prepareCommitMessage = (filename, source, sha) => {
   logObject('\nprepare-commit-msg inputs', { filename, source, sha });
 
   if (shouldSkipHook(filename, source, sha)) {
@@ -29,8 +29,6 @@ const prepareCommitMessage = async (filename, source, sha) => {
 
   const finalMessage = appendIdToMessage(message, formattedId);
   writeCommitMessage(finalMessage, filename);
-
-  log('\n\n');
 };
 
 module.exports = prepareCommitMessage;

@@ -13,6 +13,8 @@
     "pivotal-flow": "index.js",
     "pivotal-flow-start": "index.js",
     "pivotal-flow-check": "./post-checkout.js",
+    "pivotal-flow:commit-message": "./prepare-commit-msg.js",
+    "pivotal-flow:check-branch": "./post-checkout.js",
     "pfs": "index.js",
     "pf": "index.js"
   },

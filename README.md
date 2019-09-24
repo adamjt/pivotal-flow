@@ -16,48 +16,54 @@ npm install -D pivotal-flow
 npm install -g pivotal-flow
 ```
 
-`pivotal-flow` works best with [`husky` 🐶][husky] & [`git-tracker`][git-tracker].
+`pivotal-flow` works best with [`husky` 🐶][husky].
 
 ## Usage
 
-`pivotal-flow` has two commands to automate your workflow:
+`pivotal-flow` has few commands to automate your workflow:
 
-1. `pivotal-flow`:
-  Create a new story or work on an existing story via the command line.
-2. `pivotal-flow-check`:
-  Check all newly created branches have the pivotal story ID in the branch name.
+### `pivotal-flow`
 
+Create a new story or work on an existing story via the command line.
 > you can also use the `pf` alias for `pivotal-flow`
 
-### Starting a new story
+### `pivotal-flow-check`
 
-Run `pivotal-flow` (alias: `pf`) as a local/global command to start creating stories from the command line:
+Check all newly created branches have the pivotal story ID in the branch name.
 
-![Pivotal Flow](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567511137_pivotal_flow.gif)
+### `pivotal-flow:prepare-commit-msg`
 
-### Work on an existing story
+Pick up story ID from a branch name & append it to each commit message.
 
-![my stories](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567672934_mystories.gif)
+## Set up
 
-### Fuzzy search
-
-![fuzzy search](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567672849_fuzzy_search.gif)
-
-### Adding a post-checkout hook
-
-You can add the `pivotal-flow-check` as a post-checkout hook via [`husky` 🐶][husky].
+Add the hooks from pivotal-flow to your repo via [`husky` 🐶][husky].
 Just add it to your `package.json` file, for example:
 
 ```diff
    },
    "husky": {
      "hooks": {
-        // ...
-+      "post-checkout": "pivotal-flow-check"
++      "post-checkout": "pivotal-flow:check-branch,
++      "prepare-commit-msg": "pivotal-flow:commit-message"
      }
    }
  }
 ```
+
+## Starting a new story
+
+Run `pivotal-flow` (alias: `pf`) as a local/global command to start creating stories from the command line:
+
+![Pivotal Flow](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567511137_pivotal_flow.gif)
+
+## Work on an existing story
+
+![my stories](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567672934_mystories.gif)
+
+### Fuzzy search
+
+![fuzzy search](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567672849_fuzzy_search.gif)
 
 Now, while checking out a new branch, you can ensure that the [Pivotal][pivotal] story id is added to your branch name.
 
