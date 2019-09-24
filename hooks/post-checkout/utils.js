@@ -14,9 +14,9 @@ const shouldSkipBranchCheck = (exports.shouldSkipBranchCheck = (
   /* checkoutType is 0 when it's a file checkout */
   checkoutType
 ) => {
-  logObject('shouldSkipBranchCheck', { prevHead, currentHead, checkoutType });
   // if it's not a branch checkout
   if (checkoutType !== '1') {
+    lologObjectg('skipped due to checkoutType', { checkoutType });
     return true;
   }
 

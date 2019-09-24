@@ -1,4 +1,5 @@
 const { execSync } = require('child_process');
+const { logObject } = require('./common');
 
 /**
  * Get root directory of the project (where the .git folder exists)
@@ -39,7 +40,8 @@ const inDetachedHeadState = (exports.inDetachedHeadState = () => {
  * @param {String} ref a git ref name
  */
 const getCheckoutCount = (exports.getCheckoutCount = (ref = '') => {
-  const count = execSync(`git reflog --date=local | grep -o '${branchName}' | wc -l`, options).trim();
+  const count = execSync(`git reflog --date=local | grep -o '${ref}' | wc -l`, { encoding: 'utf-8' }).trim();
+  logObject('checkout count', { count, ref });
   return parseInt(count, 10);
 });
 

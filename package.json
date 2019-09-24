@@ -40,7 +40,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "prepare-commit-msg": "./prepare-commit-msg.js"
+      "prepare-commit-msg": "./prepare-commit-msg.js",
+      "post-checkout": "./post-checkout.js"
     }
   },
   "lint-staged": {

@@ -32,8 +32,5 @@ const log = (exports.log = (...args) => {
  */
 const logObject = (exports.logObject = (label, obj, options) => {
   const { showHidden = true, depth = 1, color = true } = options || {};
-  log(`
-    ${chalk.underline(label)}:
-      ${inspect(obj, showHidden, depth, color)}
-  `);
+  log(`${chalk.underline(label)}: ${inspect(obj, showHidden, depth, color)}`);
 });

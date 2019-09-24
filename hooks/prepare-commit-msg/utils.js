@@ -5,7 +5,7 @@ const { resolve } = require('path');
 
 const { getCurrentBranch, getRootDirectory } = require('../../utils/git');
 const { getStoryId } = require('../../utils/pivotal');
-const { log } = require('../../utils/common');
+const { logObject } = require('../../utils/common');
 
 /**
  * Skip the hook when
@@ -25,7 +25,7 @@ exports.shouldSkipHook = (_filename, source, sha) => source === 'commit';
  */
 exports.getCommitMessage = filename => {
   const message = readFileSync(filename, { encoding: 'utf-8' });
-  log('\noriginal commit message:\n', inspect({ message }, true, 3, true));
+  logObject('original commit message', { message });
   return message;
 };
 
@@ -45,12 +45,12 @@ exports.appendIdToMessage = (message, storyId) => {
   const { found, formatted } = getStoryId(message);
 
   if (found) {
-    log('\nskipping since story id already present in commit message\n', inspect({ message }, true, 3, true));
+    logObject('skipping - story id already present', { message });
     return message;
   }
 
   const messageWithId = [message, '---', `[${storyId}]`].join('\n');
-  log('\nappended to the commit message\n', inspect({ message: messageWithId }, true, 3, true));
+  logObject('appended to the commit message', { message: messageWithId });
   return messageWithId;
 };
 

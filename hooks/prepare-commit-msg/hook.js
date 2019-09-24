@@ -1,6 +1,5 @@
-const { inspect } = require('util');
 const { shouldSkipHook, getCommitMessage, appendIdToMessage, writeCommitMessage } = require('./utils');
-const { log } = require('../../utils/common');
+const { log, logObject } = require('../../utils/common');
 const { getStoryIdFromCurrentBranch } = require('../../utils/pivotal');
 
 /**
@@ -11,10 +10,10 @@ const { getStoryIdFromCurrentBranch } = require('../../utils/pivotal');
  * @param {String} sha - the commit SHA
  */
 const prepareCommitMessage = async (filename, source, sha) => {
-  log('\n\nprepare-commit-msg\n\n');
-  log('husky inputs:\n', inspect({ filename, source, sha }, true, 3, true));
+  logObject('\nprepare-commit-msg inputs', { filename, source, sha });
 
   if (shouldSkipHook(filename, source, sha)) {
+    log('hook skipped');
     process.exit(0);
   }
 
@@ -22,8 +21,11 @@ const prepareCommitMessage = async (filename, source, sha) => {
   const { found, formatted: formattedId } = getStoryIdFromCurrentBranch();
 
   if (!found) {
+    log('hook skipped, story ID not found in branch name');
     process.exit(0);
   }
+
+  logObject('story details from branch', { found, formattedId });
 
   const finalMessage = appendIdToMessage(message, formattedId);
   writeCommitMessage(finalMessage, filename);
