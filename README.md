@@ -16,7 +16,7 @@ npm install -D pivotal-flow
 npm install -g pivotal-flow
 ```
 
-`pivotal-flow` works best with [`husky` 🐶][husky] & the [Pivotal GitHub integration][pivotal-github].
+`pivotal-flow` is built to work with [`husky` 🐶][husky] along with the [Pivotal GitHub integration][pivotal-github].
 
 ## Usage
 
@@ -32,17 +32,17 @@ Create a new story or work on an existing story via the command line.
 Check that all _newly created branches_ have the [Pivotal][pivotal] story ID in the branch name.
 
 **Why do we need the ID in the branch?**
-This allows the GitHub integration to send updates to pivotal to [show branch information in a story](https://www.pivotaltracker.com/help/articles/github_integration/#using-the-github-integration-branches).
+This allows the GitHub integration to send updates to pivotal to [show branch & PR information in a story](https://www.pivotaltracker.com/help/articles/github_integration/#using-the-github-integration-branches).
 
-![github-pivotal-branches](https://www.pivotaltracker.com/help/kb_assets/github_integration_4@2x.png)
+<img src="https://www.pivotaltracker.com/help/kb_assets/github_integration_4@2x.png" width="300" />
 
-![github-pivotal-pr](https://www.pivotaltracker.com/help/kb_assets/github_integration_8@2x.png)
+<img src="https://www.pivotaltracker.com/help/kb_assets/github_integration_8@2x.png" width="300" />
 
 ### `pivotal-flow-prepare-commit-msg`
 
 Pick up story ID from a branch name & append it to each commit message. Again, this allows the GitHub integration to send updates to pivotal to [commit information in a story](https://www.pivotaltracker.com/help/articles/github_integration/#using-the-github-integration-commits).
 
-![github-pivotal-pr](https://www.pivotaltracker.com/help/kb_assets/github_integration_11@2x.png)
+<img src="https://www.pivotaltracker.com/help/kb_assets/github_integration_11@2x.png" width="300" />
 
 ### `pivotal-flow-commit-msg`
 
