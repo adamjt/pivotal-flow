@@ -1,22 +1,26 @@
 {
   "name": "pivotal-flow",
   "version": "1.1.0",
-  "description": "Automate your pivotal workflow",
-  "main": "index.js",
+  "description": "Automate your pivotal workflow 🔀.",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=6.8.0",
+    "git": ">=2.11.0"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "build": "rm -rf dist && tsc",
+    "start": "tsc --watch"
   },
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "pivotal-flow": "index.js",
-    "pivotal-flow-start": "index.js",
-    "pivotal-flow-check": "./hooks/post-checkout/index.js",
-    "pivotal-flow-prepare-commit-msg": "./hooks/prepare-commit-msg/index.js",
-    "pivotal-flow-commit-msg": "./hooks/commit-msg/index.js",
-    "pfs": "index.js",
-    "pf": "index.js"
+    "pivotal-flow": "dist/cli.js",
+    "pf": "dist/cli.js"
   },
   "repository": {
     "type": "git",
@@ -39,13 +43,14 @@
     "url": "https://github.com/ClearTax/pivotal-flow/issues"
   },
   "homepage": "https://github.com/ClearTax/pivotal-flow#readme",
-  "author": "Raj Anand",
+  "author": "ClearTax Engineering",
   "license": "MIT",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "prepare-commit-msg": "./hooks/prepare-commit-msg/index.js",
-      "post-checkout": "./hooks/post-checkout/index.js"
+      "commit-msg": "node -r ts-node/register src/cli.ts hook commit-msg",
+      "post-checkout": "node -r ts-node/register src/cli.ts hook post-checkout",
+      "prepare-commit-msg": "node -r ts-node/register src/cli.ts hook prepare-commit-msg"
     }
   },
   "lint-staged": {
@@ -53,7 +58,7 @@
       "prettier --write",
       "git add"
     ],
-    "**/*.{js}": [
+    "**/*.{ts,js}": [
       "eslint --fix",
       "git add"
     ]
@@ -62,17 +67,37 @@
     "@sindresorhus/slugify": "^0.9.1",
     "axios": "^0.19.0",
     "chalk": "^2.4.2",
+    "cli-table": "^0.3.1",
+    "commander": "^3.0.2",
+    "fast-memoize": "^2.5.1",
     "fuzzy": "^0.1.3",
     "inquirer": "^7.0.0",
-    "inquirer-autocomplete-prompt": "^1.0.1"
+    "inquirer-autocomplete-prompt": "^1.0.1",
+    "meow": "^5.0.0",
+    "ora": "^4.0.2",
+    "serialize-javascript": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.3.0",
-    "eslint-config-prettier": "^6.2.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "@types/cli-table": "^0.3.0",
+    "@types/eslint": "^6.1.2",
+    "@types/eslint-plugin-prettier": "^2.2.0",
+    "@types/inquirer": "^6.5.0",
+    "@types/jest": "^24.0.19",
+    "@types/meow": "^5.0.0",
+    "@types/serialize-javascript": "^1.5.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-lodash": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "husky": "^3.0.5",
     "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   }
 }
