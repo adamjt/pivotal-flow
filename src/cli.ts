@@ -2,9 +2,9 @@
 
 import { Command } from 'commander';
 
-import addVersion from './commands/version';
-import addHelp from './commands/help';
 import runHook from './hooks';
+import { getHelpOutput } from './commands/help';
+import getVersion from './commands/version';
 
 (async () => {
   const program = new Command();
@@ -12,9 +12,8 @@ import runHook from './hooks';
   program.name('pivotal-flow').description(`Automate your pivotal workflow.`);
 
   // add global options
-  program.option('--debug', 'Debug pivotal-flow');
-  await addVersion(program);
-  await addHelp(program);
+  program.option('--debug', 'Debug pivotal-flow').version(await getVersion());
+  program.on('--help', () => console.log(getHelpOutput()));
 
   // add commands
   program.command('init', 'Set-up pivotal-flow', { executableFile: './commands/init/index' });
