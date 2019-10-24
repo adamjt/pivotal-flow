@@ -2,7 +2,6 @@
 
 import { Command } from 'commander';
 
-import runHook from './hooks';
 import { getHelpOutput } from './commands/help';
 import getVersion from './commands/version';
 
@@ -19,14 +18,7 @@ import getVersion from './commands/version';
   program.command('init', 'Set-up pivotal-flow', { executableFile: './commands/init/index' });
 
   program
-    .command('hook <type>')
-    .description('Execute a hook (via husky)')
-    .option(
-      '-E <param_name>',
-      'Override the name of the environment variable where the the git-hook parameters will be provided. Use this to make the command work with a hook provider other than husky.',
-      'HUSKY_GIT_PARAMS'
-    )
-    .action(runHook)
+    .command('hook <type>', 'Execute a hook (via husky)', { executableFile: './commands/hook/index' })
     .command('start', 'Start working on a story', { executableFile: './commands/start/index', isDefault: true })
     .alias('s');
 

@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 
-import { PIVOTAL_ID_IN_STRING } from '../regex';
-import { readFile } from '../utils/fs';
-import { warning } from '../utils/console';
+import { PIVOTAL_ID_IN_STRING } from '../../regex';
+import { readFile } from '../../utils/fs';
+import { warning } from '../../utils/console';
 
 export default async function commitMsgHook(commitMessageFilename: string) {
   const commitMessage = await readFile(commitMessageFilename, { encoding: 'utf8' });

@@ -1,4 +1,3 @@
-import { HookOptions } from '../models/hooks';
 import { debugLogObject, debugLog } from './console';
 import { inDetachedHeadState } from './git';
 import { getStoryId } from './pivotal/common';
@@ -7,9 +6,8 @@ import { getStoryId } from './pivotal/common';
  * Parse params of hooks based on environment variable name provided
  * via the commander options.
  */
-export const parseHookParams = (options: HookOptions) => {
-  const { E = 'HUSKY_GIT_PARAMS' } = options;
-  const params = (process.env[E] || '').trim();
+export const parseHookParams = (envName: string) => {
+  const params = (process.env[envName] || '').trim();
   if (!params) {
     throw new TypeError(`Missing hook parameters. Try running the hook via husky or any other hook-runner.`);
   }

@@ -1,9 +1,9 @@
 import chalk from 'chalk';
 
-import { getStoryId } from '../utils/pivotal/common';
-import { shouldSkipBranchCheck } from '../utils/hooks';
-import { debugLog, warning } from '../utils/console';
-import { getCurrentBranch, isNewBranch } from '../utils/git';
+import { getStoryId } from '../../utils/pivotal/common';
+import { shouldSkipBranchCheck } from '../../utils/hooks';
+import { debugLog, warning } from '../../utils/console';
+import { getCurrentBranch, isNewBranch } from '../../utils/git';
 
 export default function postCheckoutHook(prevHead: string, currentHead: string, checkoutType: string) {
   if (shouldSkipBranchCheck(prevHead, currentHead, checkoutType)) {

@@ -1,7 +1,7 @@
-import { getStoryIfFromCurrentBranch } from '../utils/pivotal/common';
-import { shouldSkipPrepareCommitMessage, appendStoryIdToCommitMessage } from '../utils/hooks';
-import { debugLogObject, debugLog } from '../utils/console';
-import { getCommitMessage, writeCommitMessage } from '../utils/git';
+import { getStoryIfFromCurrentBranch } from '../../utils/pivotal/common';
+import { shouldSkipPrepareCommitMessage, appendStoryIdToCommitMessage } from '../../utils/hooks';
+import { debugLogObject, debugLog } from '../../utils/console';
+import { getCommitMessage, writeCommitMessage } from '../../utils/git';
 
 export default function prepareCommitMsgHook(filename: string, source: string, sha: string) {
   if (shouldSkipPrepareCommitMessage(filename, source)) {
