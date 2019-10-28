@@ -116,14 +116,18 @@ Using this alongside [`git-tracker`][git-tracker] and the [`Pivotal GitHub Integ
 
 ### Other
 
-Follow instructions for [`git-tracker`][git-tracker] and the [`Pivotal GitHub Integration`][pivotal-github] to set-up the entire flow for your repository.
+Follow instructions for and the [`Pivotal GitHub Integration`][pivotal-github] to set-up the entire flow for your repository.
+
+## Credits
+
+The concept of adding Story IDs (picked from the branch-name) to all commits are from the awesome [`git-tracker`][git-tracker] project by [@stevenharman](https://github.com/stevenharman) via the `prepare-commit-msg` hook.
 
 ## References
 
 1. [PivotalTracker][pivotal]
-1. [`git-tracker`][git-tracker]
 1. [Git Hooks][git-hooks]
 1. [Husky 🐶][husky]
+1. [`git-tracker`][git-tracker]
 
 [pivotal]: https://www.pivotaltracker.com/features
 [husky]: https://github.com/typicode/husky
