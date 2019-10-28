@@ -34,7 +34,7 @@ import { truncate, slugifyName } from '../../utils/string';
  * @example formatLabels('dx, 2.0, test, ') => ['dx', '2.0, 'test']
  * @example formatLabels('') => []
  */
-const parseLabels = (labelNames: string) => {
+const parseLabels = (labelNames: string): string[] => {
   if (!labelNames) return [];
 
   return labelNames
@@ -99,8 +99,7 @@ export const getStoryDetailsAsTable = (story: PivotalStoryResponse): string => {
   return table.toString();
 };
 
-export const createNewStory = async (client: PivotalClient, ownerId: number) => {
-  // const { id: ownerId } = await client.getProfile();
+export const createNewStory = async (client: PivotalClient, ownerId: number): Promise<PivotalStoryResponse> => {
   const answers = await inquirer.prompt(WorkOnNewStoryQuestions);
   const storyPayload = getNewStoryPayload({ ownerId, answers });
   return client.createStory(storyPayload);
@@ -111,16 +110,20 @@ export const createNewStory = async (client: PivotalClient, ownerId: number) => 
  * @param assignedSelf Whether to search for stories assigned to the current user
  * @param ownerId Current users id
  */
-export const getSearchStoryQuery = (assignedSelf: boolean, ownerId: number) => {
+export const getSearchStoryQuery = (assignedSelf: boolean, ownerId: number): string => {
   if (assignedSelf) {
     return `mywork:"${ownerId}" AND state:unstarted,planned`;
   }
-  // mywork query was much faster than owner:"" or no:owner and other options
+  // mywork query is much faster than owner:"" or no:owner and other options
   // refer https://www.pivotaltracker.com/help/articles/advanced_search/
   return `mywork:"" AND -owner:"${ownerId}" AND state:unstarted,planned`;
 };
 
-export const getExistingStories = async (client: PivotalClient, owned: boolean, ownerId: number) => {
+export const getExistingStories = async (
+  client: PivotalClient,
+  owned: boolean,
+  ownerId: number
+): Promise<PivotalStoryResponse[]> => {
   const query = getSearchStoryQuery(owned, ownerId);
   const {
     stories: { stories },
@@ -134,7 +137,7 @@ export const getExistingStories = async (client: PivotalClient, owned: boolean, 
   return stories;
 };
 
-export const getWorkflow = async ({ newStory }: { newStory: boolean }) => {
+export const getWorkflow = async ({ newStory }: { newStory: boolean }): Promise<StartStoryWorkflow> => {
   if (newStory === true) {
     return StartStoryWorkflow.New;
   }
@@ -142,7 +145,11 @@ export const getWorkflow = async ({ newStory }: { newStory: boolean }) => {
   return selection;
 };
 
-export const getStoryToWorkOn = async (client: PivotalClient, owner: PivotalProfile, workflow: StartStoryWorkflow) => {
+export const getStoryToWorkOn = async (
+  client: PivotalClient,
+  owner: PivotalProfile,
+  workflow: StartStoryWorkflow
+): Promise<PivotalStoryResponse> => {
   const { id: ownerId } = owner;
 
   if (workflow === StartStoryWorkflow.New) {
@@ -182,7 +189,7 @@ export const getSearchableStoryListSource = (
   return source;
 };
 
-export const startWorkingOnStory = async (client: PivotalClient, story: PivotalStoryResponse) => {
+export const startWorkingOnStory = async (client: PivotalClient, story: PivotalStoryResponse): Promise<void> => {
   const { actions, branchName: branchNameInput } = await inquirer.prompt(getStartStoryQuestions(story));
   const { story_type, id } = story;
 
