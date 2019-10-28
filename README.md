@@ -20,7 +20,7 @@ npm install -g pivotal-flow
 
 ## Set up
 
-Add the hooks and commands from pivotal-flow to your repo to your [`husky` 🐶][husky] config in your `package.json` file, for example:
+If installed locally for your npm project, add the hooks and commands from `pivotal-flow` to your `package.json` file, for example:
 
 ```diff
    },
@@ -38,13 +38,13 @@ Add the hooks and commands from pivotal-flow to your repo to your [`husky` 🐶]
  }
 ```
 
-Run `pivotal-flow init` to receive instructions on how to set-up pivotal flow to start using its [commands](#commands).
+To be able to use the `pivotal-flow` [commands](#commands), run `pivotal-flow init` to receive instructions on how to set-up.
 
 ## Usage
 
 `pivotal-flow` has few commands to automate your workflow.
 
-Run `pivotal-flow --help` to see usage & command documentation.
+Run `pivotal-flow --help` to see usage & documentation.
 
 > you can also use the `pf` alias for `pivotal-flow`.
 
