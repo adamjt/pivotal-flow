@@ -84,7 +84,7 @@ export const WorkOnNewStoryQuestions: QuestionCollection<WorkOnNewStoryAnswers> 
     name: 'description',
     message: 'Story Description',
     when: answers => answers.promptDescription === true,
-    default: '\n<!-- add a description here -->',
+    default: '',
   },
 ];
 

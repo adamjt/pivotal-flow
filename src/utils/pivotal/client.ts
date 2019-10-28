@@ -5,6 +5,10 @@ import ora = require('ora');
 import { isSetupComplete } from '../../commands/init/utils';
 import { PivotalProfile, PivotalStory, PivotalStoryResponse, GetStoriesResponse } from './types';
 import { error as logError } from '../console';
+
+/**
+ * An http-client-ish class acting as an interface to the Pivotal REST APIs.
+ */
 export default class PivotalClient {
   private restClient: AxiosInstance;
   private API_TOKEN: string;
@@ -131,12 +135,3 @@ export default class PivotalClient {
     }
   }
 }
-
-// (async () => {
-//   // test it out
-//   const client = new PivotalClient({
-//     API_TOKEN: process.env.PIVOTAL_TOKEN as string,
-//     PROJECT_ID: process.env.PIVOTAL_PROJECT_ID as string,
-//   });
-//   console.log(serialize(await client.getStories(`mywork:"${2714693}" AND state:unstarted,planned`), { space: 2 }));
-// })();

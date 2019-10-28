@@ -29,9 +29,7 @@ export const SetupQuestions: QuestionCollection<SetupAnswers> = [
     name: 'pivotalProjectId',
     prefix: questionHelp(`
 You can find the Project ID in the last part of your project board's URL:
-For eg. in ${chalk.underline(
-      'https://www.pivotaltracker.com/n/projects/12341234'
-    )} - '12341234' would be the Project ID.
+For eg. in ${chalk.underline('https://www.pivotaltracker.com/n/projects/1234123')} - '1234123' would be the Project ID.
 \n`),
     message: 'Pivotal Project ID:',
     validate: (value: string) => {
