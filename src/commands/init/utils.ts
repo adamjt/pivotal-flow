@@ -20,11 +20,6 @@ To get started with pivotal-flow, run the following commands in your current ter
 {dim.italic You can also add them to your profile (~/.bash_profile, ~/.zshrc, ~/.profile, or ~/.bashrc) so the environment variables are automatically added for all new terminal sessions.}
 `);
 
-const addToCurrentEnvironment = ({ pivotalToken, pivotalProjectId }: SetupAnswers) => {
-  process.env.PIVOTAL_TOKEN = pivotalToken;
-  process.env.PIVOTAL_PROJECT_ID = pivotalProjectId;
-};
-
 /**
  * Collects user input & displays setup instructions accordingly.
  */
@@ -33,7 +28,6 @@ export const performSetup = async () => {
   const { pivotalProjectId, pivotalToken } = answers;
 
   if (pivotalProjectId && pivotalToken) {
-    addToCurrentEnvironment(answers);
     displaySetupInstructions(answers);
   } else {
     error('Failed to set-up pivotal-flow. Please try again.');
@@ -41,30 +35,19 @@ export const performSetup = async () => {
 };
 
 /**
- * Prompts the user to setup pivotal-flow if it has not already been set-up.
- * Returns true if set-up is already complete or gets completed as part of this function.
- * Returns false if the user cancels setup.
+ * Aborts if pivotal-flow has not been set-up. Displays setup instructions before aborting.
  */
-export const promptSetup = async () => {
+export const abortIfNotSetup = async () => {
   if (!isSetupComplete()) {
     const { wantSetup } = await inquirer.prompt(PromptToSetup);
     if (wantSetup) {
       await performSetup();
-      return true;
+    } else {
+      error(`Setup for pivotal-flow incomplete. Please try again after running 'pivotal-flow init'.`);
     }
-    return false;
-  }
-  return true;
-};
-
-/**
- * Checks if pivotal-flow was set up, & prompts the user to setup if it has not been performed.
- * Aborts the process if the user chooses not to perform setup.
- */
-export const abortIfNotSetup = async () => {
-  const done = await promptSetup();
-  if (!done) {
-    error(`Setup for pivotal-flow incomplete. Please try again after running 'pivotal-flow init'.`);
-    process.exit(0);
+    // return non-zero error code when set-up is not completed.
+    process.exit(wantSetup ? 0 : 1);
+  } else {
+    return;
   }
 };
