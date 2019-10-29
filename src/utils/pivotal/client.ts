@@ -1,10 +1,14 @@
-import Axios, { AxiosInstance, AxiosError } from 'axios';
+import Axios, { AxiosInstance, AxiosError, AxiosRequestConfig } from 'axios';
 import serialize, { SerializeJSOptions } from 'serialize-javascript';
 import ora = require('ora');
 
 import { isSetupComplete } from '../../commands/init/utils';
 import { PivotalProfile, PivotalStory, PivotalStoryResponse, GetStoriesResponse } from './types';
-import { error as logError } from '../console';
+import { error as logError, warning as logWarning } from '../console';
+
+export interface PivotalClientOptions {
+  debug?: boolean;
+}
 
 /**
  * An http-client-ish class acting as an interface to the Pivotal REST APIs.
@@ -16,14 +20,16 @@ export default class PivotalClient {
   private SERIALIZE_ERROR_OPTIONS: SerializeJSOptions = {
     space: 2,
   };
+  private debug: boolean;
 
-  constructor() {
+  constructor(options: PivotalClientOptions) {
     if (!isSetupComplete()) {
-      throw new Error('Setup incomplete');
+      throw new Error('Setup incomplete.');
     }
 
     this.API_TOKEN = process.env.PIVOTAL_TOKEN as string;
     this.PROJECT_ID = process.env.PIVOTAL_PROJECT_ID as string;
+    this.debug = options.debug || false;
 
     this.restClient = Axios.create({
       baseURL: 'https://www.pivotaltracker.com/services/v5',
@@ -39,18 +45,73 @@ export default class PivotalClient {
     });
   }
 
+  /**
+   * Logs the error (with help-text, if any) based on debug/no-debug mode.
+   * Logs response JSON when debug mode is true.
+   */
   logErrorMessage(axiosError: AxiosError) {
     const { response, request } = axiosError;
     if (response) {
       // non-2xx response
       const { status, data, statusText } = response;
-      logError(`Error - ${serialize({ status, data, statusText }, this.SERIALIZE_ERROR_OPTIONS)}`);
+      const { possible_fix: helpText } = data || {};
+
+      if (helpText === 'string') {
+        // when pivotal provides a 'possible_fix' for their error code
+        logWarning(helpText);
+      }
+      this.debug && logError(`Error - ${serialize({ status, data, statusText }, this.SERIALIZE_ERROR_OPTIONS)}`);
     } else if (request) {
       // network error
-      logError(`NetworkError - ${serialize(request, this.SERIALIZE_ERROR_OPTIONS)})}`);
+      logWarning(`NetworkError: Please check your internet connection & try again.`);
+      this.debug && logError(`${serialize(request, this.SERIALIZE_ERROR_OPTIONS)})}`);
     } else {
       // Something happened in setting up the request that triggered an Error
-      logError(`Unknown Error - ${axiosError.message}`);
+      logWarning(`An unknown error occurred. Use the --debug option to get more details.`);
+      this.debug && logError(`Unknown Error - ${axiosError.message}`);
+    }
+  }
+
+  /**
+   * Run an axios, with some common wrappers:
+   *  - log error messages, with help if applicable
+   *  - add a spinner to indicate progress
+   */
+  async request<ResponseType>(
+    /** Axios config is transparently passed `to axios.request()` */
+    config: AxiosRequestConfig,
+    /** Labels for the spinner. */
+    spinnerConfig:
+      | false
+      | {
+          /**
+           * Text to display alongside the spinner: while the request is in progress
+           * @example 'Creating story'
+           */
+          progress: string;
+          /**
+           * Text to display alongside the spinner: while the request succeeds
+           * @example 'Story created successfully'
+           */
+          success: string;
+          /**
+           * Text to display alongside the spinner: if there's an error in the request.
+           * @example 'Story creation failed'
+           */
+          error: string;
+        }
+  ) {
+    const spinner = spinnerConfig && this.getSpinner(spinnerConfig.progress);
+    const { success: onSuccess, error: onError } = spinnerConfig || {};
+    try {
+      spinner && spinner.start();
+      const { data } = await this.restClient.request<ResponseType>(config);
+      spinner && spinner.succeed(onSuccess);
+      return data;
+    } catch (errorResponse) {
+      spinner && spinner.fail(onError);
+      this.logErrorMessage(errorResponse);
+      throw new Error('Failed to fetch/update details from/to Pivotal.');
     }
   }
 
@@ -58,13 +119,17 @@ export default class PivotalClient {
    * Get the details about the current user
    */
   async getProfile() {
-    try {
-      const { data } = await this.restClient.get<PivotalProfile>('/me');
-      return data;
-    } catch (errorResponse) {
-      this.logErrorMessage(errorResponse);
-      throw errorResponse;
-    }
+    return this.request<PivotalProfile>(
+      {
+        method: 'GET',
+        url: '/me',
+      },
+      {
+        progress: 'Fetching your profile',
+        success: 'Profile information received',
+        error: 'Error fetching profile',
+      }
+    );
   }
 
   /**
