@@ -4,3 +4,5 @@ __test__
 .prettierrc.js
 .eslint*
 .editorconfig
+*.js.map
+coverage

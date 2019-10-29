@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "build": "rm -rf dist && tsc",
-    "start": "tsc --watch"
+    "start": "tsc --watch",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "files": [
     "dist"
