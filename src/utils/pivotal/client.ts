@@ -93,12 +93,12 @@ export default class PivotalClient {
            * Text to display alongside the spinner: while the request succeeds
            * @example 'Story created successfully'
            */
-          success: string;
+          success?: string;
           /**
            * Text to display alongside the spinner: if there's an error in the request.
            * @example 'Story creation failed'
            */
-          error: string;
+          error?: string;
         }
   ) {
     const spinner = spinnerConfig && this.getSpinner(spinnerConfig.progress);
@@ -137,15 +137,13 @@ export default class PivotalClient {
    * @param {string} query - pivotal search query-string
    */
   async getStories(query: string) {
-    try {
-      const { data } = await this.restClient.get<GetStoriesResponse>(
-        `/projects/${this.PROJECT_ID}/search?query=${query}`
-      );
-      return data;
-    } catch (errorResponse) {
-      this.logErrorMessage(errorResponse);
-      throw errorResponse;
-    }
+    return this.request<GetStoriesResponse>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}/search?query=${query}`,
+      },
+      { progress: 'Fetching stories' }
+    );
   }
 
   /**
@@ -153,13 +151,13 @@ export default class PivotalClient {
    * @param id {number} Story id
    */
   async getStory(id: number) {
-    try {
-      const { data } = await this.restClient.get<PivotalStoryResponse>(`/projects/${this.PROJECT_ID}/stories/${id}`);
-      return data;
-    } catch (errorResponse) {
-      this.logErrorMessage(errorResponse);
-      throw errorResponse;
-    }
+    return this.request<PivotalStoryResponse>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}/stories/${id}`,
+      },
+      { progress: `Fetching story [${id}]` }
+    );
   }
 
   /**
@@ -167,19 +165,14 @@ export default class PivotalClient {
    * @param {PivotalStory} story
    */
   async createStory(story: PivotalStory) {
-    const label = 'Creating story';
-    const spinner = this.getSpinner(label);
-
-    try {
-      spinner.start();
-      const { data } = await this.restClient.post<PivotalStoryResponse>(`/projects/${this.PROJECT_ID}/stories`, story);
-      spinner.succeed('Story created successfully');
-      return data;
-    } catch (errorResponse) {
-      spinner.fail('Failed to create a story.');
-      this.logErrorMessage(errorResponse);
-      throw errorResponse;
-    }
+    return this.request<PivotalStoryResponse>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}/stories`,
+        data: story,
+      },
+      { progress: 'Creating story', success: 'Story created successfully', error: 'Failed to create a story' }
+    );
   }
 
   /**
@@ -188,15 +181,13 @@ export default class PivotalClient {
    * @param story {PivotalStory} story details to be updated
    */
   async updateStory(id: number, story: Partial<PivotalStory>) {
-    try {
-      const { data } = await this.restClient.put<PivotalStoryResponse>(
-        `/projects/${this.PROJECT_ID}/stories/${id}`,
-        story
-      );
-      return data;
-    } catch (errorResponse) {
-      this.logErrorMessage(errorResponse);
-      throw errorResponse;
-    }
+    return this.request<PivotalStoryResponse>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}/stories/${id}`,
+        data: story,
+      },
+      false
+    );
   }
 }
