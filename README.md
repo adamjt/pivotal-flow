@@ -53,7 +53,7 @@ Run `pivotal-flow --help` to see usage & documentation.
 ### init
 
 ```sh
-# provides instructions on how to get started with using the pivotal-flow commands
+# provides instructions on how to get set-up to use other pivotal-flow commands
 $ pivotal-flow init
 ```
 
@@ -110,17 +110,15 @@ Run `pivotal-flow` (alias: `pf`) as a local/global command to start creating sto
 
 ![fuzzy search](https://assets1.cleartax-cdn.com/cleargst-frontend/misc/1567672849_fuzzy_search.gif)
 
-Now, while checking out a new branch, you can ensure that the [Pivotal][pivotal] story id is added to your branch name.
-
-Using this alongside [`git-tracker`][git-tracker] and the [`Pivotal GitHub Integration`][pivotal-github] ensures your updates (commits, pushes, merges etc) on GitHub are posted directly and automatically to your Pivotal stories.
-
 ### Other
+
+Using `pivotal-flow` hooks alongside [`Pivotal GitHub Integration`][pivotal-github] ensures your updates (commits, pushes, merges etc) on GitHub are posted directly and automatically to your Pivotal stories.
 
 Follow instructions for and the [`Pivotal GitHub Integration`][pivotal-github] to set-up the entire flow for your repository.
 
 ## Credits
 
-The concept of adding Story IDs (picked from the branch-name) to all commits are from the awesome [`git-tracker`][git-tracker] project by [@stevenharman](https://github.com/stevenharman) via the `prepare-commit-msg` hook.
+The concept of adding Story IDs (picked from the branch-name) to all commits are from the awesome [`git-tracker`][git-tracker] project by [@stevenharman](https://github.com/stevenharman) - ported to husky/node implementation in `pivotal-flow`'s `prepare-commit-msg` hook.
 
 ## References
 
