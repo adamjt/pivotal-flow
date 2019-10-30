@@ -47,16 +47,6 @@ export const formatLabels = (labels: LabelResponse[]): string =>
     .join(', ')
     .trim();
 
-/**
- *
- * Appends attribution of 'created via pivotal-flow' to an existing description.
- */
-export const addAttribution = (description?: string): string => `${description || ''}
-
---
-(story created via [pivotal-flow](https://github.com/ClearTax/pivotal-flow))
-`;
-
 export const getNewStoryPayload = ({
   ownerId,
   answers,
@@ -70,7 +60,7 @@ export const getNewStoryPayload = ({
     name,
     estimate,
     labels: parseLabels(labelNames || ''),
-    description: addAttribution(description),
+    description,
     owner_ids: [ownerId],
     // assuming the story is in the current iteration if you are working on it
     current_state: StoryState.Planned,
@@ -193,9 +183,9 @@ export const getSearchableStoryListSource = (
 
 export const startWorkingOnStory = async (story: PivotalStoryResponse): Promise<void> => {
   const { checkoutBranch, branchName: branchNameInput } = await inquirer.prompt(getStartStoryQuestions(story));
-  const { story_type, id } = story;
 
   if (checkoutBranch) {
+    const { story_type, id } = story;
     const slugifiedBranchName = slugifyName(branchNameInput);
     const branchName = getStoryBranchName(slugifiedBranchName, story_type, id);
     checkoutNewBranch(branchName);
