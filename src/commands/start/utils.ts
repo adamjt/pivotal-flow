@@ -43,13 +43,21 @@ const parseLabels = (labelNames: string): string[] => {
     .filter(Boolean);
 };
 
-export const formatLabels = (labels: LabelResponse[]) =>
+/**
+ * Get display-able labels as a string.
+ * @example formatLabels([{ name: 'one', ...}, { name: 'two', ... }]) => 'one, two'
+ */
+export const formatLabels = (labels: LabelResponse[]): string =>
   labels
     .map(label => label.name)
     .join(', ')
     .trim();
 
-export const addAttribution = (description?: string) => `${description || ''}
+/**
+ *
+ * Appends attribution of 'created via pivotal-flow' to an existing description.
+ */
+export const addAttribution = (description?: string): string => `${description || ''}
 
 --
 (story created via [pivotal-flow](https://github.com/ClearTax/pivotal-flow))
