@@ -21,27 +21,22 @@ export const parseHookParams = (envName: string) => {
  */
 export const shouldSkipBranchCheck = (
   /* checkout out from */
-  prevHead: string,
+  _prevHead: string,
   /* checkout out to */
-  currentHead: string,
+  _currentHead: string,
   /* checkoutType is 0 when it's a file checkout */
   checkoutType: string
 ) => {
+  debugLogObject('shouldSkipBranchCheck', { _prevHead, _currentHead, checkoutType });
+
   if (checkoutType !== '1') {
-    debugLogObject('skipped due to checkoutType', { checkoutType });
-    return true;
-  }
-
-  debugLogObject('head references', { prevHead, currentHead });
-
-  if (prevHead === currentHead) {
-    debugLog('skipped due same prevHead & currentHead');
+    debugLog('skipped due to checkoutType');
     return true;
   }
 
   // if we're in a detached head state (eg. submodule checkout or rebase)
   const detachedState = inDetachedHeadState();
-  debugLogObject('inDetachedHeadState?', { detachedState });
+  debugLogObject('inDetachedHeadState', { detachedState });
 
   return detachedState;
 };

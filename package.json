@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "build": "rm -rf dist && tsc",
+    "postbuild": "./scripts/make-executable.sh",
     "start": "tsc --watch",
     "prepublishOnly": "npm run test && npm run build"
   },
@@ -38,7 +39,9 @@
     "git",
     "hook",
     "hooks",
-    "post-checkout"
+    "post-checkout",
+    "commit-msg",
+    "prepare-commit-msg"
   ],
   "bugs": {
     "url": "https://github.com/ClearTax/pivotal-flow/issues"
@@ -49,9 +52,9 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "commit-msg": "node -r ts-node/register src/cli.ts hook commit-msg",
-      "post-checkout": "node -r ts-node/register src/cli.ts hook post-checkout",
-      "prepare-commit-msg": "node -r ts-node/register src/cli.ts hook prepare-commit-msg"
+      "commit-msg": "node -r ts-node/register src/cli.ts hook check-story-id-in-commit",
+      "post-checkout": "node -r ts-node/register src/cli.ts hook check-story-id-in-branch",
+      "prepare-commit-msg": "node -r ts-node/register src/cli.ts hook add-story-id-to-commit"
     }
   },
   "lint-staged": {
