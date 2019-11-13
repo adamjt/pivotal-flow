@@ -2,12 +2,19 @@ import Axios, { AxiosInstance, AxiosError, AxiosRequestConfig } from 'axios';
 import serialize, { SerializeJSOptions } from 'serialize-javascript';
 import ora = require('ora');
 
-import { isSetupComplete } from '../../commands/init/utils';
-import { PivotalProfile, PivotalStory, PivotalStoryResponse, GetStoriesResponse } from './types';
+import {
+  PivotalProfile,
+  PivotalStory,
+  PivotalStoryResponse,
+  GetStoriesResponse,
+  PivotalProjectResponse,
+} from './types';
 import { error as logError, warning as logWarning } from '../console';
 
 export interface PivotalClientOptions {
   debug?: boolean;
+  apiToken: string;
+  projectId: string;
 }
 
 /**
@@ -23,12 +30,8 @@ export default class PivotalClient {
   private debug: boolean;
 
   constructor(options: PivotalClientOptions) {
-    if (!isSetupComplete()) {
-      throw new Error('Setup incomplete.');
-    }
-
-    this.API_TOKEN = process.env.PIVOTAL_TOKEN as string;
-    this.PROJECT_ID = process.env.PIVOTAL_PROJECT_ID as string;
+    this.API_TOKEN = options.apiToken;
+    this.PROJECT_ID = options.projectId;
     this.debug = options.debug || false;
 
     this.restClient = Axios.create({
@@ -143,6 +146,19 @@ export default class PivotalClient {
         url: `/projects/${this.PROJECT_ID}/search?query=${query}`,
       },
       { progress: 'Fetching stories' }
+    );
+  }
+
+  /**
+   * Fetch a project details for a specified projectId
+   */
+  async getProject() {
+    return this.request<PivotalProjectResponse>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}`,
+      },
+      { progress: `Fetching project details` }
     );
   }
 

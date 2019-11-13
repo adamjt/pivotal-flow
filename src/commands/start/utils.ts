@@ -13,6 +13,7 @@ import {
 import { StartStoryWorkflow } from './types';
 import {
   PickStoryWorkflowQuestions,
+  PickProjectWorkflowQuestions,
   WorkOnNewStoryAnswers,
   WorkOnNewStoryQuestions,
   getSelectStoryFromListQuestions,
@@ -21,6 +22,7 @@ import {
 import inquirer from '../../utils/inquirer';
 import PivotalClient from '../../utils/pivotal/client';
 import { truncate, slugifyName } from '../../utils/string';
+import { getPivotalFlowConfig } from '../init/utils';
 
 /**
  * Parse the labels string into a list of labels
@@ -147,6 +149,24 @@ export const getWorkflow = async ({ newStory }: { newStory: boolean }): Promise<
   return selection;
 };
 
+export const selectProjectToCreateStory = async (): Promise<{ apiToken: string; projectId: string }> => {
+  const pivotalConfig = await getPivotalFlowConfig();
+  let projectConfig = { projectId: '', apiToken: '' };
+
+  if (pivotalConfig) {
+    const { projects, pivotalApiToken } = pivotalConfig;
+
+    if (projects.length === 1) {
+      const [project] = projects;
+      return { ...projectConfig, projectId: String(project.projectId), apiToken: pivotalApiToken };
+    }
+
+    const { selectedProject } = await inquirer.prompt(PickProjectWorkflowQuestions(projects));
+    projectConfig = { ...projectConfig, projectId: String(selectedProject), apiToken: pivotalApiToken };
+  }
+  return projectConfig;
+};
+
 export const getStoryToWorkOn = async (
   client: PivotalClient,
   owner: PivotalProfile,
@@ -155,8 +175,7 @@ export const getStoryToWorkOn = async (
   const { id: ownerId } = owner;
 
   if (workflow === StartStoryWorkflow.New) {
-    const story = await createNewStory(client, ownerId);
-    return story;
+    return await createNewStory(client, ownerId);
   }
 
   const owned = workflow === StartStoryWorkflow.Owned;

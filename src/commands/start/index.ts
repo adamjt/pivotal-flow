@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { error, warning } from '../../utils/console';
 import { abortIfNotSetup } from '../init/utils';
 import PivotalClient from '../../utils/pivotal/client';
-import { getWorkflow, getStoryToWorkOn, startWorkingOnStory } from './utils';
+import { getWorkflow, getStoryToWorkOn, startWorkingOnStory, selectProjectToCreateStory } from './utils';
 
 (async () => {
   const program = new Command();
@@ -19,9 +19,9 @@ import { getWorkflow, getStoryToWorkOn, startWorkingOnStory } from './utils';
   await abortIfNotSetup();
   const { newStory = false, debug = false } = program;
   try {
+    const { projectId, apiToken } = await selectProjectToCreateStory();
+    const client = new PivotalClient({ apiToken, projectId });
     const workflow = await getWorkflow({ newStory: newStory as boolean });
-
-    const client = new PivotalClient({ debug });
     const profile = await client.getProfile();
     const story = await getStoryToWorkOn(client, profile, workflow);
     await startWorkingOnStory(story);

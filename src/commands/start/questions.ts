@@ -3,12 +3,17 @@ import { QuestionCollection } from 'inquirer';
 import { slugifyName } from '../../utils/string';
 import { getStoryTypeChoices, getStoryBranchName } from '../../utils/pivotal/common';
 import { StartStoryWorkflow } from './types';
+import { PivotalProjectConfig } from '../init/utils';
 import { StoryType, PointScales, PivotalStoryResponse } from '../../utils/pivotal/types';
 import { HelpWorkOnNewStory, HelpSelectStoryFromList, HelpStartStory } from './helpText';
 import { getSearchableStoryListSource, getStoryDetailsAsTable } from './utils';
 
 export interface PickStoryWorkflowAnswers {
   selection: StartStoryWorkflow;
+}
+
+export interface PickProjectWorkflowAnswers {
+  selectedProject: number;
 }
 
 export const PickStoryWorkflowQuestions: QuestionCollection<PickStoryWorkflowAnswers> = [
@@ -24,6 +29,24 @@ export const PickStoryWorkflowQuestions: QuestionCollection<PickStoryWorkflowAns
     ],
   },
 ];
+
+export const PickProjectWorkflowQuestions = (
+  projects: PivotalProjectConfig[]
+): QuestionCollection<PickProjectWorkflowAnswers> => {
+  const projectChoices = projects.map((project: PivotalProjectConfig) => {
+    const { projectName: name, projectId: value } = project;
+    return { name: `${name} [${value}]`, value };
+  });
+  return [
+    {
+      type: 'list',
+      name: 'selectedProject',
+      message: 'Choose a project to work on?',
+      default: 0,
+      choices: [...projectChoices],
+    },
+  ];
+};
 
 export interface WorkOnNewStoryAnswers {
   story_type: StoryType;
