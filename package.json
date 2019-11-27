@@ -1,7 +1,7 @@
 {
   "name": "pivotal-flow",
-  "version": "1.1.0",
-  "description": "Automate your pivotal workflow 🔀.",
+  "version": "2.0.0-alpha.3",
+  "description": "🔀 A command-line tool that helps you manage & automate your workflow to use with PivotalTracker.",
   "engines": {
     "node": ">=8",
     "npm": ">=6.8.0",
@@ -52,9 +52,9 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "commit-msg": "node -r ts-node/register src/cli.ts hook check-story-id-in-commit",
-      "post-checkout": "node -r ts-node/register src/cli.ts hook check-story-id-in-branch",
-      "prepare-commit-msg": "node -r ts-node/register src/cli.ts hook add-story-id-to-commit"
+      "commit-msg": "node -r ts-node/register/transpile-only src/cli.ts hook check-story-id-in-commit",
+      "post-checkout": "node -r ts-node/register/transpile-only src/cli.ts hook check-story-id-in-branch",
+      "prepare-commit-msg": "node -r ts-node/register/transpile-only src/cli.ts hook add-story-id-to-commit"
     }
   },
   "lint-staged": {
@@ -70,7 +70,7 @@
   "dependencies": {
     "@sindresorhus/slugify": "^0.9.1",
     "axios": "^0.19.0",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "cli-table": "^0.3.1",
     "commander": "^4.0.0",
     "cosmiconfig": "^6.0.0",
@@ -88,9 +88,9 @@
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^24.0.19",
     "@types/serialize-javascript": "^1.5.0",
-    "@typescript-eslint/eslint-plugin": "^2.3.3",
-    "@typescript-eslint/parser": "^2.3.3",
-    "eslint": "^6.5.1",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "eslint": "^6.7.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-lodash": "^6.0.0",
