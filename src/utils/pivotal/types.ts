@@ -148,3 +148,23 @@ export const PointScales = {
   fibonacci: [0, 1, 2, 3, 5, 8],
   powers_of_two: [0, 1, 2, 4, 8],
 };
+
+export const enum PivotalReviewState {
+  Unstarted = 'unstarted',
+  InReview = 'in_review',
+  Pass = 'pass',
+  Revise = 'revise',
+}
+export interface PivotalReviewType {
+  kind: 'review_type';
+  id: number;
+  name: string;
+}
+export interface PivotalReview {
+  kind: 'review';
+  id: number;
+  story_id: number;
+  review_type_id: number;
+  status: PivotalReviewState;
+  review_type: PivotalReviewType;
+}

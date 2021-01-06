@@ -8,6 +8,8 @@ import {
   PivotalStoryResponse,
   GetStoriesResponse,
   PivotalProjectResponse,
+  PivotalReviewState,
+  PivotalReview,
 } from './types';
 import { error as logError, warning as logWarning } from '../console';
 
@@ -205,5 +207,27 @@ export default class PivotalClient {
       },
       false
     );
+  }
+
+  async getReviews(id: number) {
+    return this.request<PivotalReview[]>(
+      {
+        method: 'GET',
+        url: `/projects/${this.PROJECT_ID}/stories/${id}/reviews`,
+        params: { fields: ':default,review_type' },
+      },
+      false
+    )
+  }
+
+  async updateReview(storyId: number, reviewId: number, status: PivotalReviewState) {
+    return this.request<PivotalReview>(
+      {
+        method: 'PUT',
+        url: `/projects/${this.PROJECT_ID}/stories/${storyId}/reviews/${reviewId}`,
+        data: { status }
+      },
+      false
+    )
   }
 }
