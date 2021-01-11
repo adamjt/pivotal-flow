@@ -106,11 +106,11 @@ export const createNewStory = async (client: PivotalClient, ownerId: number): Pr
  */
 export const getSearchStoryQuery = (assignedSelf: boolean, ownerId: number): string => {
   if (assignedSelf) {
-    return `mywork:"${ownerId}" AND state:unstarted,planned`;
+    return `mywork:"${ownerId}" AND state:unstarted,planned,started`;
   }
   // mywork query is much faster than owner:"" or no:owner and other options
   // refer https://www.pivotaltracker.com/help/articles/advanced_search/
-  return `mywork:"" AND -owner:"${ownerId}" AND state:unstarted,planned`;
+  return `mywork:"" AND -owner:"${ownerId}" AND state:unstarted,planned,started`;
 };
 
 export const getExistingStories = async (
@@ -183,9 +183,9 @@ export const getSearchableStoryListSource = (
   stories: PivotalStoryResponse[]
 ) => {
   const choices = stories.map(story => {
-    const { story_type, name, id } = story;
+    const { story_type, name, current_state, id } = story;
     return {
-      name: `[${id}] ${getStoryTypeIcon(story_type)}: ${truncate(name)}`,
+      name: `[${id}] ${getStoryTypeIcon(story_type)} <${current_state}>: ${truncate(name)}`,
       value: story,
     };
   });

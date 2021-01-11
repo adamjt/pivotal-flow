@@ -19,7 +19,10 @@ const getReviewerTechQuestions = (
       name: 'reviewId',
       message: 'Choose a tech to work on?',
       default: 0,
-      choices: [...reviewChoices],
+      choices: [
+        ...reviewChoices,
+        { name: 'None', reviewId: -1 }
+      ],
     },
   ];
 };
@@ -28,10 +31,14 @@ export default async (
   client: PivotalClient,
   story: PivotalStoryResponse,
 ): Promise<void> => {
-  const reviews = await client.getReviews(story.id);
-  const { reviewId } = await inquirer.prompt(getReviewerTechQuestions(reviews));
   if (story.current_state == StoryState.Unstarted) {
     await client.updateStory(story.id, { current_state: StoryState.Started });
   }
-  await client.updateReview(story.id, reviewId, PivotalReviewState.InReview);
+  const reviews = await client.getReviews(story.id);
+  if (reviews && reviews.length > 0) {
+    const { reviewId } = await inquirer.prompt(getReviewerTechQuestions(reviews));
+    if (reviewId > 0) {
+      await client.updateReview(story.id, reviewId, PivotalReviewState.InReview);
+    }
+  }
 };
