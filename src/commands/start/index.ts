@@ -26,7 +26,7 @@ import startStoryAndTech from './startStoryAndTech';
     const profile = await client.getProfile();
     const story = await getStoryToWorkOn(client, profile, workflow);
     await startWorkingOnStory(story);
-    await startStoryAndTech(client, story);
+    await startStoryAndTech(client, profile, story);
   } catch (e) {
     if (e instanceof Error) {
       error(e.valueOf().toString());

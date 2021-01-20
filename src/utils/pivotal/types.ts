@@ -165,6 +165,7 @@ export interface PivotalReview {
   id: number;
   story_id: number;
   review_type_id: number;
+  reviewer_id: number;
   status: PivotalReviewState;
   review_type: PivotalReviewType;
 }

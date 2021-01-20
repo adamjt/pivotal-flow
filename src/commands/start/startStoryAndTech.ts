@@ -1,7 +1,7 @@
 import inquirer, { QuestionCollection } from 'inquirer';
 
 import PivotalClient from "../../utils/pivotal/client";
-import { PivotalReview, PivotalReviewState, PivotalStoryResponse, StoryState } from '../../utils/pivotal/types';
+import { PivotalReview, PivotalProfile, PivotalReviewState, PivotalStoryResponse, StoryState } from '../../utils/pivotal/types';
 export interface PickReviewAnswers {
   reviewId: number;
 }
@@ -29,16 +29,18 @@ const getReviewerTechQuestions = (
 
 export default async (
   client: PivotalClient,
+  reviewer: PivotalProfile,
   story: PivotalStoryResponse,
 ): Promise<void> => {
   if (story.current_state == StoryState.Unstarted) {
-    await client.updateStory(story.id, { current_state: StoryState.Started });
+    const owner_ids = [...new Set([...story.owner_ids, reviewer.id])];
+    await client.updateStory(story.id, { current_state: StoryState.Started, owner_ids });
   }
   const reviews = await client.getReviews(story.id);
   if (reviews && reviews.length > 0) {
     const { reviewId } = await inquirer.prompt(getReviewerTechQuestions(reviews));
     if (reviewId > 0) {
-      await client.updateReview(story.id, reviewId, PivotalReviewState.InReview);
+      await client.updateReview(story.id, reviewId, { reviewer_id: reviewer.id, status: PivotalReviewState.InReview });
     }
   }
 };

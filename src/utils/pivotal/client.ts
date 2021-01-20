@@ -220,12 +220,12 @@ export default class PivotalClient {
     )
   }
 
-  async updateReview(storyId: number, reviewId: number, status: PivotalReviewState) {
+  async updateReview(storyId: number, reviewId: number, review: Partial<PivotalReview>) {
     return this.request<PivotalReview>(
       {
         method: 'PUT',
         url: `/projects/${this.PROJECT_ID}/stories/${storyId}/reviews/${reviewId}`,
-        data: { status }
+        data: review,
       },
       false
     )

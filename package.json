@@ -1,6 +1,6 @@
 {
   "name": "@perrystreetsoftware/pivotal-flow",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "🔀 A command-line tool that helps you manage & automate your workflow to use with PivotalTracker.",
   "engines": {
     "node": ">=8",
@@ -100,10 +100,10 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-lodash": "^6.0.0",
     "eslint-plugin-markdown": "^1.0.1",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "eslint-plugin-prettier": "^3.1.1",
     "husky": "^4.0.10",
     "jest": "^24.9.0",
     "lint-staged": "^10.0.1",
