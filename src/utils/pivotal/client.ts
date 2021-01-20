@@ -8,7 +8,6 @@ import {
   PivotalStoryResponse,
   GetStoriesResponse,
   PivotalProjectResponse,
-  PivotalReviewState,
   PivotalReview,
 } from './types';
 import { error as logError, warning as logWarning } from '../console';
